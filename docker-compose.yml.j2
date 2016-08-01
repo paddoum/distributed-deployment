@@ -1,0 +1,26 @@
+pgdata:
+  image: "tianon/true"
+  volumes:
+   - {{local_db_dir}}:/var/lib/postgresql/data/
+postgis:
+  image: "osm2vectortiles/postgis:v3"
+  volumes_from:
+   - pgdata
+  ports:
+   - "5432"
+export-worker:
+  image: "osm2vectortiles/export"
+  command: ./export-worker.sh
+  restart: always
+  volumes:
+   - ./osm2vectortiles.tm2source:/data/tm2source
+  links:
+   - postgis:db
+  environment:
+    AWS_ACCESS_KEY_ID: {{aws_access_key_id}}
+    AWS_SECRET_ACCESS_KEY: {{aws_secret_access_key}}
+    AWS_S3_HOST: {{aws_s3_host}}
+    BUCKET_NAME: {{aws_s3_bucket}}
+    RENDER_TIMEOUT: "300"
+    TILE_TIMEOUT: "1800000"
+    RABBITMQ_URI: {{rabbitmq_uri}}

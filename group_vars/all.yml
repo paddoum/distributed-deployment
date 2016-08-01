@@ -1,0 +1,11 @@
+db_block_device: /dev/sdb
+local_db_block_device: /dev/sdc
+install_dir: /home/me/osm2vectortiles
+db_mount_dir: /db
+local_mount_dir: /data
+local_db_dir: /data/pgdata
+aws_access_key_id: <access-key>
+aws_secret_access_key: <secret-key>
+aws_s3_host: os.zhdk.cloud.switch.ch
+aws_s3_bucket: osm2vectortiles-jobs
+rabbitmq_uri: "amqp://osm:osm@<rabbit-host>:5672"

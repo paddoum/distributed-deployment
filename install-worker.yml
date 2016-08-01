@@ -1,0 +1,26 @@
+- hosts: all
+  remote_user: me
+  gather_facts: yes
+  become: yes
+  become_user: root
+  become_method: sudo
+  tasks:
+    - name: format local disk
+      filesystem: fstype=btrfs dev={{local_db_block_device}}
+    - name: create local mountpoint
+      file: path={{local_mount_dir}} state=directory mode=0755
+    - name: create master mountpoint
+      file: path={{db_mount_dir}} state=directory mode=0755
+    - name: mount master db
+      mount: name={{db_mount_dir}} src={{db_block_device}} fstype=btrfs state=mounted opts=ro
+    - name: mount local db
+      mount: name={{local_mount_dir}} src={{local_db_block_device}} fstype=btrfs state=mounted
+    - name: clone repo
+      git: repo=git://github.com/osm2vectortiles/osm2vectortiles.git
+           dest={{install_dir}}
+           force=yes
+           version=master
+    - name: install docker-compose
+      get_url: url=https://github.com/docker/compose/releases/download/1.7.1/docker-compose-Linux-x86_64 dest={{install_dir}}/docker-compose mode=0755
+    - name: replace docker-compose.yml
+      template: src=docker-compose.yml.j2 dest={{install_dir}}/docker-compose.yml

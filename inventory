@@ -1,0 +1,9 @@
+[all]
+tiler-worker-1 ansible_host=120.251.99.166
+tiler-worker-2 ansible_host=104.165.89.124
+tiler-worker-3 ansible_host=116.138.119.146
+tiler-worker-4 ansible_host=124.115.101.80
+
+[all:vars]
+ansible_ssh_user=me
+ansible_python_interpreter=/home/me/bin/python
